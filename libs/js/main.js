@@ -24,7 +24,7 @@ var curPage;
 function loadedJSON(data) {
     //Просто запомним содержимое этого JSONa
     ourJSON = data.filter(function (item) {
-        if (localStorage.getItem(item.image)) { console.log('wtf'); return false;}
+        if (localStorage.getItem(item.image)) {return false;}
         return true;
     });
     //И удалим загрузочную штуку
