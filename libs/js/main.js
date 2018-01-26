@@ -24,7 +24,7 @@ var curPage;
 function loadedJSON(data) {
     //Просто запомним содержимое этого JSONa
     ourJSON = data.filter(function (item) {
-        if (localStorage.getItem(item.image)) return false;
+        if (localStorage.getItem(item.image)) { console.log('wtf'); return false;}
         return true;
     });
     //И удалим загрузочную штуку
@@ -179,7 +179,7 @@ function addPaginator(curPage) {
 function addCard(img) {
     var deck = $("#deck").children()[0];
     //Т.к. мы удаляли некоторые карточки, то мы их не отрисовываем
-    if (localStorage.getItem(img.image)) { //Если у нас рисунок уже был отображен, то говорим, что ничего не делали
+    if (localStorage.getItem(img.image)) { //Если у нас рисунок уже был удален, то говорим, что ничего не делали
         return 0;
     }
     var div = makeCard(img);
@@ -191,8 +191,8 @@ function addCard(img) {
 
 //Парсим ID изображения. Вынес в отдельную функцию, т.к., может, буду менять стиль карточки, чтобы не переписывать каждый раз
 function getImgID(elem) {
-    var nodes = elem.childNodes[0].childNodes;
-    var result = "";
+    var nodes = elem.childNodes[1].childNodes;
+    var result;
     nodes.forEach(function (node) {
         if (node.tagName === "IMG") {
             result = node.id;
