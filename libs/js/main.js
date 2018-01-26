@@ -36,8 +36,8 @@ function loadedJSON(data) {
 //Поработаем над отображением числа карт на странице
 $("input[name=perPage]").change(function () { //Нам важно только изменение флажка, а не клик по нему
     howMany = $("input[name=perPage]:checked")[0].value;
-    //    hideAll();
-    //    loadImgs(ourJSON, 0, howMany);
+    hideAll();
+    addPaginator();
 });
 
 
@@ -58,6 +58,8 @@ $("input[name=sortBy]").click(function () {
         isDescending = !isDescending; //И меняем порядок сортировки в памяти
     }
     curSort = newSort; //Перезапоминаем
+    hideAll();
+    addPaginator();
 });
 
 //А тут сама сортировка
@@ -113,9 +115,22 @@ function compareSize(a, b) {
     return b.filesize - a.filesize;
 }
 
-
 //----------А потом уже не паримся и обрабатываем все эти данные
 function makeCard(img) {
+
+    var options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timezone: 'UTC',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    };
+
+    var date = new Date(img.timestamp * 1000);
+
+
     var div = document.createElement('div');
     div.classList.add('col-md-4');
     div.classList.add('col-lg-3');
@@ -125,7 +140,8 @@ function makeCard(img) {
     div.innerHTML = '<a class="card box-shadow no-decoration">' +
         '<span class="close" onclick="hideItem(this.parentNode.parentNode)">x</span>' +
         '<img  class="card-img-top img-fluid lazyload" src="https://demos.laraget.com/images/loading2.gif" id=' + img.image + ' data-src=http://93.91.165.233:8081/frontend_data/' + img.image + '>' +
-        '<div class="card-body card-text">some text in here like LOREM IPSUM</div>' +
+        '<div class="card-body card-text">some text in here like LOREM IPSUM' +
+        '<p class="card-text"><small class="text-muted">Created: ' + date.toLocaleString("ru", options) + '</small></p></div>' +
         '</a>';
     return div;
 }
@@ -133,7 +149,7 @@ function makeCard(img) {
 function makeDeck(json) {
     var result = document.createElement('DIV');
     result.classList.add("row");
-    json.forEach(function(img){
+    json.forEach(function (img) {
         result.appendChild(makeCard(img));
     });
     return result;
@@ -211,8 +227,8 @@ function hideItem(elem) {
 
     //Чтобы после удаление правильно картинка подгружалась
     var curPage = $("#paginator").pagination('getSelectedPageNum');
-    
-    addCard(ourJSON[curPage*howMany]);
+
+    addCard(ourJSON[curPage * howMany]);
     //Логично, что после удаления, нужно добавить другую
 }
 
