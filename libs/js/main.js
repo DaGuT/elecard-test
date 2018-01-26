@@ -29,7 +29,8 @@ function loadedJSON(data) {
     });
     //И удалим загрузочную штуку
     resort(ourJSON, curSort, !isDescending); //После загрузки пересортируем заного
-    //    loadImgs(ourJSON, 0, howMany);
+    
+    //И добавим странички
     addPaginator();
 }
 
@@ -64,7 +65,6 @@ $("input[name=sortBy]").click(function () {
 
 //А тут сама сортировка
 function resort(array, type, isReversed) { //Если ничего не передаём в isReversed, то он равен undefined, что при сравнениях переводится в 0
-    skipped = 0; //Т.к. пересортировали, то уже пропущенные не считаются
     switch (type) {
         case "name":
             ourJSON.sort(compareName);
@@ -85,9 +85,6 @@ function resort(array, type, isReversed) { //Если ничего не пере
         default:
             break;
     }
-    //    hideAll();
-    //    var howMany = $("input[name=perPage]:checked")[0].value; //Сколько отображаем на странице (радиобаттоны для этого в шестеренке)
-    //    loadImgs(ourJSON, 0, howMany);
 }
 
 //---------Функции для сравнения, чтобы подать в arr.sort(). Подаём именно так, чтобы по-умолчанию был порядок убывания
@@ -137,8 +134,8 @@ function makeCard(img) {
     div.classList.add('col-sm-6');
     div.classList.add('step');
     div.classList.add('closable');
-    div.innerHTML = '<a class="card box-shadow no-decoration">' +
-        '<span class="close" onclick="hideItem(this.parentNode.parentNode)">x</span>' +
+    div.innerHTML = '<span class="close" onclick="hideItem(this.parentNode)">x</span>' +
+        '<a href="http://93.91.165.233:8081/frontend_data/' + img.image + '" class="card lightbox box-shadow no-decoration">' +
         '<img  class="card-img-top img-fluid lazyload" src="https://demos.laraget.com/images/loading2.gif" id=' + img.image + ' data-src=http://93.91.165.233:8081/frontend_data/' + img.image + '>' +
         '<div class="card-body card-text">some text in here like LOREM IPSUM' +
         '<p class="card-text"><small class="text-muted">Created: ' + date.toLocaleString("ru", options) + '</small></p></div>' +
@@ -164,13 +161,18 @@ function addPaginator(curPage) {
         pageNumber: curPage || 1,
         showPrevious: true,
         showNext: true,
+        afterPaging: function () {
+          lightBox();  
+        },
         callback: function (data, pagination) {
             // template method of yourself
             var html = makeDeck(data);
             $('#deck').html(html);
             lazyload();
         }
-    })
+    });
+    //Сразу подгрузим галлерею для картинок
+
 }
 
 //На замену удаленной
@@ -182,7 +184,8 @@ function addCard(img) {
     }
     var div = makeCard(img);
     deck.append(div);
-    lazyload();
+    lazyload(); 
+    lightBox();
     return 1; //А вот если мы добавили картинки, то нужно таки сообщить, что добавили
 }
 
@@ -243,8 +246,6 @@ function resetCards() {
     localStorage.clear();
     reloadJSON();
 }
-
-
 
 
 //Просто прикольная svg, которая отображается, пока json не скачается
@@ -360,3 +361,5 @@ var svgLoading = ['<svg version="1.1" id="L1" xmlns="http://www.w3.org/2000/svg"
 //    }
 //    lazyload();
 //}
+
+

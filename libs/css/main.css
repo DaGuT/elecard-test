@@ -107,8 +107,9 @@ input[type="radio"]:checked + label {
 
 .close {
     position: absolute;
+    z-index:1;
     top: 0px;
-    right: 0px;
+    right: 15px;
     padding-right: 3px;
     padding-bottom: 3px;
     padding-left: 3px;
@@ -135,5 +136,10 @@ input[type="radio"]:checked + label {
     margin-top: 20px;
     /*display: -webkit-flex; display: -ms-flexbox; display: flex;*/ /* выравниваем блоки по высоте */
 }
+
+
+
+
+
 
 
