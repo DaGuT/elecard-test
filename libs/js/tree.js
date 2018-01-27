@@ -29,13 +29,14 @@ function prepDataForTree(isLightbox) {
 }
 
 function tree() {
+    
     $('#jstree').jstree({
         'core': {
             'data': prepDataForTree(true)
         }
     });
 
-    $('#jstree').bind('ready.jstree', function () {
+    $('#jstree').on('after_open.jstree', function () {
         lightBox();
     })
 }

@@ -27,9 +27,9 @@ function makeCard(img) {
 
 
     var div = document.createElement('div');
+    div.classList.add('col-sm-6');
     div.classList.add('col-md-4');
     div.classList.add('col-lg-3');
-    div.classList.add('col-sm-6');
     div.classList.add('step');
     div.classList.add('closable');
     div.innerHTML = '<span class="close" onclick="hideItem(this.parentNode)">x</span>' +

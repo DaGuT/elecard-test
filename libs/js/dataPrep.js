@@ -53,7 +53,7 @@ function initDeck() {
     $("#list").html('<div class="col-table" id="deck">' +
         '<!--Сюда будут вставлять все карточки -->' +
         '</div>' +
-        '<div class="container offset-1 offset-sm-2 offset-md-4" id="paginator">' +
+        '<div class="container offset-sm-2 offset-md-4 col-sm-10 col-md-8" id="paginator">' +
         '<!--А здесь будут странички -->' +
         '</div>');
     $('#cardsSetting').show();
