@@ -1,5 +1,6 @@
 //Также можно добавить парсинг строки адреса и её изменение, чтобы можно было передавать друзьям, однако из-за возможности удаления карточек считаю эту затею бессмысленной и делаю текущий простой вариант
 
+//Поехали! :)
 $(document).ready(function () {
     var loader = document.createElement("DIV");
     loader.id = "loadingInProgress";
@@ -42,9 +43,10 @@ function initView() {
         //И добавим странички
         addPaginator();
     } else {
-        initTree();
+        var isLightbox=false;
+        initTree(isLightbox);
         //И тут добавить функцию включения дерева
-        tree();
+        tree(isLightbox);
     }
 }
 
@@ -59,9 +61,17 @@ function initDeck() {
     $('#cardsSetting').show();
 }
 
-function initTree() {
-    $("#list").html('<div class="treeBrowser"><div id="jstree"></div></div>');
+function initTree(isLightbox) {
     $('#cardsSetting').hide();
+    if (!isLightbox) {
+        $("#list").html('<div class="treeBrowser border rounded"><div class="row"><div class="col-md-4" id="jstree"></div><div class="col-md-8 border-left d-flex justify-content-center" id="browser"><img  src="http://exiton-analytic.ru/static/img/no_photo.png"></div></div>');
+        $('#jstree,#browser>img').css({
+            'height': window.innerHeight * 0.7,
+            'max-width': $('#browser').width()
+        });
+    } else {
+        $("#list").html('<div class="treeBrowser"><div id="jstree"></div></div>');
+    }
 }
 
 //изменяем вид структуры

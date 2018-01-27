@@ -1,7 +1,4 @@
-
-body {
-
-}
+body {}
 
 header {
     position: fixed;
@@ -65,13 +62,11 @@ input[type="radio"]:checked + label {
 
 .first {
     padding-top: 60px;
-    padding-bottom:60px;
+    padding-bottom: 60px;
 
 }
 
-.card {
-
-}
+.card {}
 
 .album a {
     text-decoration: none;
@@ -106,7 +101,7 @@ input[type="radio"]:checked + label {
 
 .close {
     position: absolute;
-    z-index:1;
+    z-index: 1;
     top: 0px;
     right: 15px;
     padding-right: 3px;
@@ -127,20 +122,31 @@ input[type="radio"]:checked + label {
 }
 
 #paginator {
-    padding-top:30px;
+    padding-top: 30px;
 
 }
 
 .step {
     margin-top: 20px;
-    /*display: -webkit-flex; display: -ms-flexbox; display: flex;*/ /* выравниваем блоки по высоте */
+    /*display: -webkit-flex; display: -ms-flexbox; display: flex;*/
+    /* выравниваем блоки по высоте */
 }
 
 
 /* Деревья */
-.treeBrowser {
 
+#jstree {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
+/*Фикс для мобилок, где менюшка выдвигается, чтобы её можно было скроллить*/
 
+@media (max-width: 767.98px) {
+    .fix-boundary {
+        overflow: auto;
+        max-height: 100vh;
+    }
+}
