@@ -43,7 +43,7 @@ function initView() {
         //И добавим странички
         addPaginator();
     } else {
-        var isLightbox=false;
+        var isLightbox = ($("input[name=treeView]:checked")[0].id === "Lightbox");
         initTree(isLightbox);
         //И тут добавить функцию включения дерева
         tree(isLightbox);
@@ -55,17 +55,23 @@ function initDeck() {
     $("#list").html('<div class="col-table" id="deck">' +
         '<!--Сюда будут вставлять все карточки -->' +
         '</div>' +
-        '<div class="container offset-sm-2 offset-md-4 col-sm-10 col-md-8" id="paginator">' +
+        '<div class="container d-flex justify-content-center" id="paginator">' +
         '<!--А здесь будут странички -->' +
         '</div>');
     $('#cardsSetting').show();
+    $('#treeSettings').hide();
 }
 
 function initTree(isLightbox) {
     $('#cardsSetting').hide();
+    $('#treeSettings').show();
     if (!isLightbox) {
         $("#list").html('<div class="treeBrowser border rounded"><div class="row"><div class="col-md-4" id="jstree"></div><div class="col-md-8 border-left d-flex justify-content-center" id="browser"><img  src="http://exiton-analytic.ru/static/img/no_photo.png"></div></div>');
-        $('#jstree,#browser>img').css({
+        $('#jstree').css({
+            'height': window.innerHeight * 0.7,
+            'max-width': $('#jstree').width()
+        });
+        $('#browser>img').css({
             'height': window.innerHeight * 0.7,
             'max-width': $('#browser').width()
         });

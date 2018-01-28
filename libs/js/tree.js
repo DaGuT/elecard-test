@@ -1,3 +1,8 @@
+$('input[name=treeView]').change(function(){
+    $.jstree.destroy();
+    initView();
+});
+
 function prepDataForTree(isLightbox) {
     //Можно, конечно, делать через ul,li, но зачем? Так проще :)
     var result = []; //Массив, который подходит под jstree
