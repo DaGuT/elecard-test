@@ -6,11 +6,14 @@
 //Поработаем над отображением числа карт на странице
 $("input[name=perPage]").change(function () { //Нам важно только изменение флажка, а не клик по нему
     howMany = $("input[name=perPage]:checked")[0].value;
+    localStorage.setItem('howMany', howMany);
     hideAll();
     addPaginator();
 });
 
 //----------А потом уже не паримся и обрабатываем все эти данные
+
+//Это вид карточки итоговый
 function makeCard(img) {
 
     var options = {
@@ -23,6 +26,7 @@ function makeCard(img) {
         second: 'numeric'
     };
 
+    //из UNIX в JS
     var date = new Date(img.timestamp * 1000);
 
 
@@ -41,6 +45,7 @@ function makeCard(img) {
     return div;
 }
 
+//Это уже все карточки в одном div
 function makeDeck(json) {
     var result = document.createElement('DIV');
     result.classList.add("row");
@@ -51,16 +56,17 @@ function makeDeck(json) {
 }
 
 //Если мы перезагружали данные, то пагинатор загрузится с последнего места
-function addPaginator(curPage) {
+function addPaginator() {
     $("#loadingInProgress").remove();
     $("#paginator").pagination({
         dataSource: ourJSON,
         pageSize: howMany,
-        pageNumber: curPage || 1,
+        pageNumber: curPage,
         showPrevious: true,
         showNext: true,
-        afterPaging: function () {
-          lightBox();  
+        afterPaging: function (page) {
+            localStorage.setItem('curPage',page);
+            lightBox();
         },
         callback: function (data, pagination) {
             // template method of yourself
@@ -73,7 +79,7 @@ function addPaginator(curPage) {
 
 }
 
-//На замену удаленной
+//На замену удаленной приходится делать вот так :)
 function addCard(img) {
     var deck = $("#deck").children()[0];
     //Т.к. мы удаляли некоторые карточки, то мы их не отрисовываем
@@ -82,7 +88,7 @@ function addCard(img) {
     }
     var div = makeCard(img);
     deck.append(div);
-    lazyload(); 
+    lazyload();
     lightBox();
     return 1; //А вот если мы добавили картинки, то нужно таки сообщить, что добавили
 }
@@ -99,6 +105,7 @@ function getImgID(elem) {
     return result;
 }
 
+//Ищем, какую позицию занимала наша картинка, чтобы потом выкинуть её из ourJSON
 function findPos(imgName) {
     for (var i = 0; i < ourJSON.length; ++i) {
         if (ourJSON[i].image === imgName) {
@@ -116,7 +123,7 @@ function hideItem(elem) {
 
     //Если у нас есть хоть какое-то имя, то запоминаем в локальном хранилище
     if (id) {
-        localStorage.setItem(id, true);
+        localStorage.setItem(id, 1); //Хотел сувать true, но оно преобразуется к строке :(
         ourJSON.splice(findPos(id), 1); //Вырежем этот элемент
     }
     //Сперва спрячем с анимацией, а потом сразу удалим
@@ -254,5 +261,3 @@ var svgLoading = ['<svg version="1.1" id="L1" xmlns="http://www.w3.org/2000/svg"
 //    }
 //    lazyload();
 //}
-
-

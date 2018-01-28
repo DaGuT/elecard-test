@@ -21,6 +21,34 @@ var isDescending = true; //А эта переменная нужна для те
 var howMany = $("input[name=perPage]:checked")[0].value; //Число отображаемых карточек на странице. Честно, проще засунуть в эту одну переменную, чем постоянно вызывать селектор. Да и бесит этот селектор длинный писать :) Мы ж за оптимизацию рабочего процесса?
 var curPage;
 
+//ЗЗагружаемся в последнее состояние
+function loadLastState(){
+    
+    //Дерево или список
+    var show_like=localStorage.getItem('show_like') || 'grid';
+    $('#'+show_like).prop('checked',true);
+    
+    //Как сортировали и в каком направлении
+    var sortType=localStorage.getItem('sortType');
+    var sortIsReversed=+localStorage.getItem('sortIsReversed');//Преобразуем к числу
+    $('#'+sortType).prop('checked',true);
+    resort(ourJSON, sortType, sortIsReversed); //После загрузки пересортируем заного
+    curSort=sortType;
+    isDescending = !sortIsReversed;
+    
+    //Сколько на странице плиток
+    howMany=localStorage.getItem('howMany') || 30;
+    $('#'+howMany+'PP').prop('checked',true);
+    
+    //Отображали картинки браузером или LightBox
+    var treeView=localStorage.getItem('treeView') || "Lightbox";
+    $('#'+treeView).prop('checked',true);
+    
+    //Страница, на которой были в последний раз
+    curPage=localStorage.getItem('curPage') || 1;
+}
+
+//Как только загрузили json, приступаем к его обработке
 function loadedJSON(data) {
     //Просто запомним содержимое этого JSONa
     ourJSON = data.filter(function (item) {
@@ -30,14 +58,15 @@ function loadedJSON(data) {
         return true;
     });
     //И удалим загрузочную штуку
-    resort(ourJSON, curSort, !isDescending); //После загрузки пересортируем заного
-
+    loadLastState();
+    
+    //Отрисовываем все элементы и включаем все библиотеки
     initView();
-
 }
 
+//Включаем отрисовку и вставку всех элементов на странице
 function initView() {
-    //В зависимости от режима инициализируем старт
+    //В зависимости от режима инициализируем карточки или древо
     if ($('input[name=show_like]:checked')[0].id === "grid") {
         initDeck();
         //И добавим странички
@@ -50,8 +79,11 @@ function initView() {
     }
 }
 
+//Это карточки с его html'кой
 function initDeck() {
-
+    //memory state
+    localStorage.setItem('show_like',"grid");
+    
     $("#list").html('<div class="col-table" id="deck">' +
         '<!--Сюда будут вставлять все карточки -->' +
         '</div>' +
@@ -62,7 +94,11 @@ function initDeck() {
     $('#treeSettings').hide();
 }
 
+//А тут дерево. Мы их выбирали в initView
 function initTree(isLightbox) {
+    //memory state
+    localStorage.setItem('show_like',"tree");
+    
     $('#cardsSetting').hide();
     $('#treeSettings').show();
     if (!isLightbox) {
@@ -123,6 +159,11 @@ $("input[name=sortBy]").click(function () {
 
 //А тут сама сортировка
 function resort(array, type, isReversed) { //Если ничего не передаём в isReversed, то он равен undefined, что при сравнениях переводится в 0
+    //memory
+    localStorage.setItem('sortType',type);
+    localStorage.setItem('sortIsReversed',isReversed||0);//При считке будем делать преобразование к числам, чтобы потом здесь всё работало :)
+
+    
     switch (type) {
         case "name":
             ourJSON.sort(compareName);
